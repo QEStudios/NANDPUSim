@@ -20,16 +20,36 @@ type Reg8 struct {
 	AccessFlags
 }
 
-func (r *Reg8) Get() byte  { return r.val }
-func (r *Reg8) Set(v byte) { r.val = v }
+func (r *Reg8) Get() byte {
+	if !r.CanRead {
+		Logger.Panic("attempted to read from Reg8 without read capability")
+	}
+	return r.val
+}
+func (r *Reg8) Set(v byte) {
+	if !r.CanWrite {
+		Logger.Panic("attempted to write to Reg8 without write capability")
+	}
+	r.val = v
+}
 
 type Reg16 struct {
 	val uint16
 	AccessFlags
 }
 
-func (r *Reg16) Get() uint16  { return r.val }
-func (r *Reg16) Set(v uint16) { r.val = v }
+func (r *Reg16) Get() uint16 {
+	if !r.CanRead {
+		Logger.Panic("attempted to read from Reg16 without read capability")
+	}
+	return r.val
+}
+func (r *Reg16) Set(v uint16) {
+	if !r.CanWrite {
+		Logger.Panic("attempted to write to Reg16 without write capability")
+	}
+	r.val = v
+}
 
 type SplitReg16 struct {
 	val uint16
@@ -54,12 +74,42 @@ func NewSplitReg16(flags16, flagsHi, flagsLo AccessFlags) *SplitReg16 {
 	return r
 }
 
-func (r *SplitReg16) Get() uint16  { return r.val }
-func (r *SplitReg16) Set(v uint16) { r.val = v }
-func (h *splitHi) Get() byte       { return byte(h.parent.val >> 8) }
-func (h *splitHi) Set(v byte)      { h.parent.val = (h.parent.val & 0x00FF) | (uint16(v) << 8) }
-func (l *splitLo) Get() byte       { return byte(l.parent.val & 0x00FF) }
-func (l *splitLo) Set(v byte)      { l.parent.val = (l.parent.val & 0xFF00) | uint16(v) }
+func (r *SplitReg16) Get() uint16 {
+	if !r.CanRead {
+		Logger.Panic("attempted to read from SplitReg16 without read capability")
+	}
+	return r.val
+}
+func (r *SplitReg16) Set(v uint16) {
+	if !r.CanWrite {
+		Logger.Panic("attempted to write to SplitReg16 without write capability")
+	}
+	r.val = v
+}
+func (h *splitHi) Get() byte {
+	if !h.CanRead {
+		Logger.Panic("attempted to read from splitHi without read capability")
+	}
+	return byte(h.parent.val >> 8)
+}
+func (h *splitHi) Set(v byte) {
+	if !h.CanWrite {
+		Logger.Panic("attempted to write to splitHi without write capability")
+	}
+	h.parent.val = (h.parent.val & 0x00FF) | (uint16(v) << 8)
+}
+func (l *splitLo) Get() byte {
+	if !l.CanRead {
+		Logger.Panic("attempted to read from splitLo without read capability")
+	}
+	return byte(l.parent.val & 0x00FF)
+}
+func (l *splitLo) Set(v byte) {
+	if !l.CanWrite {
+		Logger.Panic("attempted to write to splitLo without write capability")
+	}
+	l.parent.val = (l.parent.val & 0xFF00) | uint16(v)
+}
 
 var Reg8Names = map[byte]string{
 	0x00: "RegA",
