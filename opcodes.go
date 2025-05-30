@@ -166,7 +166,7 @@ const (
 	// Changes flags: None
 	//
 	// Description: Jumps execution to the address stored in the J register.
-	OP_JMP byte = 0x40
+	OP_JMP byte = 0x42
 
 	// Args: 1=[low byte of addr], 2=[high byte of addr]
 	//
@@ -174,14 +174,14 @@ const (
 	//
 	// Description: Pushes the current Program Counter value onto the stack (first the low byte, then the high byte),
 	// and then jumps execution to the address stored in the J register.
-	OP_CALL byte = 0x41
+	OP_CALL byte = 0x43
 
 	// Args: None
 	//
 	// Changes flags: None
 	//
 	// Description: Pops the top of the stack into the Program Counter (first the high byte, then the low byte), and then jumps execution to that address.
-	OP_RET byte = 0x42
+	OP_RET byte = 0x44
 
 	// Args: 1=[low byte of addr], 2=[high byte of addr]
 	//
