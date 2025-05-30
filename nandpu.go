@@ -148,6 +148,16 @@ func (c *NANDPU) pcInc() {
 	c.PC.Set(c.INC.Get())
 }
 
+func (c *NANDPU) push(val byte) {
+	c.Mem.Write(c.SP.Get(), val)
+	c.SP.val -= 1
+}
+
+func (c *NANDPU) pop() byte {
+	c.SP.val += 1
+	return c.Mem.Read(c.SP.Get())
+}
+
 func (c *NANDPU) printFlags() {
 	Logger.Printf("Flag values: Z=%d C=%d S=%d L=%d",
 		boolToInt(c.Zero),
