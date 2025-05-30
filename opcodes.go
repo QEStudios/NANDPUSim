@@ -99,7 +99,7 @@ const (
 	//
 	// Changes flags: None
 	//
-	// Description: Stores the value at the memory address stored in the M register into the output 8-bit register (arg 2).
+	// Description: Stores the value at the memory address stored in the M register into the output 8-bit register (arg 1).
 	OP_LDM byte = 0x22
 
 	// Args: 1=[in 8-bit reg], 2=[low byte of addr], 3=[high byte of addr]
@@ -161,14 +161,14 @@ const (
 	// and then jumps execution to the given address.
 	OP_CALI byte = 0x41
 
-	// Args: 1=[low byte of addr], 2=[high byte of addr]
+	// Args: None
 	//
 	// Changes flags: None
 	//
 	// Description: Jumps execution to the address stored in the J register.
 	OP_JMP byte = 0x42
 
-	// Args: 1=[low byte of addr], 2=[high byte of addr]
+	// Args: None
 	//
 	// Changes flags: None
 	//
