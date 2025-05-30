@@ -16,6 +16,7 @@ type NANDPU struct {
 	PC   Reg16 // Program Counter
 	INST Reg8  // Instruction Register
 	INC  Reg16 // Increment Register
+	SP   Reg16 // Stack Pointer
 
 	// Flags
 	Zero     bool
@@ -54,6 +55,7 @@ func NewNANDPU(romData []byte) *NANDPU {
 	c.PC.AccessFlags = AccessFlags{CanRead: true, CanWrite: true}
 	c.INST.AccessFlags = AccessFlags{CanRead: true, CanWrite: true}
 	c.INC.AccessFlags = AccessFlags{CanRead: true, CanWrite: false}
+	c.SP.AccessFlags = AccessFlags{CanRead: true, CanWrite: true}
 
 	c.RegA.AccessFlags = AccessFlags{CanRead: true, CanWrite: true}
 	c.RegB.AccessFlags = AccessFlags{CanRead: true, CanWrite: true}
@@ -101,6 +103,7 @@ func NewNANDPU(romData []byte) *NANDPU {
 		c.RegJ,
 		&c.PC,
 		&c.INC,
+		&c.SP,
 	}
 
 	Logger.Println("Initialised NANDPU")

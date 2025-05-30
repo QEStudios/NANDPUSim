@@ -128,6 +128,7 @@ const (
 	REG_J   byte = 0x02
 	REG_PC  byte = 0x03
 	REG_INC byte = 0x04
+	REG_SP  byte = 0x05
 )
 
 var Reg8Names = map[byte]string{
@@ -148,4 +149,5 @@ var Reg16Names = map[byte]string{
 	0x02: "RegJ",
 	0x03: "PC",
 	0x04: "INC",
+	0x05: "SP",
 }
