@@ -111,6 +111,25 @@ func (l *splitLo) Set(v byte) {
 	l.parent.val = (l.parent.val & 0xFF00) | uint16(v)
 }
 
+const (
+	REG_A  byte = 0x00
+	REG_B  byte = 0x01
+	REG_C  byte = 0x02
+	REG_D  byte = 0x03
+	REG_M1 byte = 0x04
+	REG_M2 byte = 0x05
+	REG_X  byte = 0x06
+	REG_Y  byte = 0x07
+	REG_J1 byte = 0x08
+	REG_J2 byte = 0x09
+
+	REG_M   byte = 0x00
+	REG_XY  byte = 0x01
+	REG_J   byte = 0x02
+	REG_PC  byte = 0x03
+	REG_INC byte = 0x04
+)
+
 var Reg8Names = map[byte]string{
 	0x00: "RegA",
 	0x01: "RegB",
