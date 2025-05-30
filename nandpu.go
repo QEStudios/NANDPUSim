@@ -140,14 +140,14 @@ func (c *NANDPU) Step() { // TODO
 		c.pcInc()
 
 	case OP_ADD:
-		sum := uint16(c.RegB.Get()) + uint16(c.RegC.Get())
-		sumByte := byte(sum)
-		c.updateFlags(sumByte)
-		c.Carry = sum > 0xFF
+		result := uint16(c.RegB.Get()) + uint16(c.RegC.Get())
+		resultByte := byte(result)
+		c.updateFlags(resultByte)
+		c.Carry = result > 0xFF
 		c.pcInc()
 		targetIndex := c.getMemVal()
 		target := c.Reg8List[targetIndex]
-		target.Set(sumByte)
+		target.Set(resultByte)
 		Logger.Printf("Add regB (value %d) + regC (value %d) -> %s (new value %d)", c.RegB.Get(), c.RegC.Get(), Reg8Names[targetIndex], target.Get())
 		c.printFlags()
 		c.pcInc()
