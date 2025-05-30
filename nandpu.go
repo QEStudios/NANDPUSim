@@ -153,7 +153,7 @@ func (c *NANDPU) printFlags() {
 	)
 }
 
-func (c *NANDPU) Step() { // TODO
+func (c *NANDPU) Step() bool { // TODO
 	c.getInst()
 	instName := OpcodeNames[c.INST.Get()]
 
@@ -181,5 +181,10 @@ func (c *NANDPU) Step() { // TODO
 		Logger.Printf("ADD regB (value %d) + regC (value %d) -> %s (new value %d)", c.RegB.Get(), c.RegC.Get(), Reg8Names[targetIndex], target.Get())
 		c.printFlags()
 		c.pcInc()
+
+	case OP_SPECIAL_HALT:
+		return false
 	}
+
+	return true
 }

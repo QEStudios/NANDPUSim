@@ -294,6 +294,13 @@ const (
 	//
 	// Description: If the Less Than flag is clear, jumps execution to the address stored in the J register; otherwise performs no operation.
 	OP_BLC byte = 0x67
+
+	// Args: None
+	//
+	// Changes flags: None
+	//
+	// Description: Halts execution.
+	OP_SPECIAL_HALT byte = 0xFF
 )
 
 var OpcodeNames = map[byte]string{
@@ -336,4 +343,5 @@ var OpcodeNames = map[byte]string{
 	0x65: "BSC",
 	0x66: "BLS",
 	0x67: "BLC",
+	0xFF: "HLT",
 }
