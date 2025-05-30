@@ -148,7 +148,7 @@ func (c *NANDPU) Step() { // TODO
 		targetIndex := c.getMemVal()
 		target := c.Reg8List[targetIndex]
 		target.Set(resultByte)
-		Logger.Printf("Add regB (value %d) + regC (value %d) -> %s (new value %d)", c.RegB.Get(), c.RegC.Get(), Reg8Names[targetIndex], target.Get())
+		Logger.Printf("ADD regB (value %d) + regC (value %d) -> %s (new value %d)", c.RegB.Get(), c.RegC.Get(), Reg8Names[targetIndex], target.Get())
 		c.printFlags()
 		c.pcInc()
 	}
