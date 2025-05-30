@@ -144,7 +144,7 @@ func (c *NANDPU) increment16(value uint16) {
 
 func (c *NANDPU) pcInc() {
 	c.increment16(c.PC.Get())
-	c.PC = c.INC
+	c.PC.Set(c.INC.Get())
 }
 
 func (c *NANDPU) printFlags() {
