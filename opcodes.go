@@ -88,11 +88,11 @@ const (
 	// Description: Stores the immediate value (arg 1) into the output 8-bit register (arg 2).
 	OP_LDI byte = 0x20
 
-	// Args: 1=[memory addr], 2=[out 8-bit reg]
+	// Args: 1=[low byte of addr], 2=[high byte of addr], 3=[out 8-bit reg]
 	//
 	// Changes flags: None
 	//
-	// Description: Stores the value at the memory address (arg 1) into the output 8-bit register (arg 2).
+	// Description: Stores the value at the memory address (arg 1,2) into the output 8-bit register (arg 2).
 	OP_LDMI byte = 0x21
 
 	// Args: 1=[out 8-bit reg]
@@ -102,11 +102,11 @@ const (
 	// Description: Stores the value at the memory address stored in the M register into the output 8-bit register (arg 2).
 	OP_LDM byte = 0x22
 
-	// Args: 1=[in 8-bit reg], 2=[mem addr]
+	// Args: 1=[in 8-bit reg], 2=[low byte of addr], 3=[high byte of addr]
 	//
 	// Changes flags: None
 	//
-	// Description: Stores the value from the input 8-bit register (arg 1) into the memory address (arg 2).
+	// Description: Stores the value from the input 8-bit register (arg 1) into the memory address (arg 2,3).
 	OP_STOI byte = 0x23
 
 	// Args: 1=[out 8-bit reg]
