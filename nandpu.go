@@ -10,6 +10,12 @@ type NANDPU struct {
 	INST byte   // Instruction Register
 	INC  uint16 // Increment Register
 
+	// Flags
+	Zero     bool
+	Carry    bool
+	Sign     bool
+	LessThan bool
+
 	// 8 Bit Registers
 	RegA byte
 	RegB byte
