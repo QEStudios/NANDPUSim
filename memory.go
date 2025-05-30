@@ -20,6 +20,7 @@ type ROM struct {
 }
 
 func NewROM(base, size uint16) *ROM        { return &ROM{data: make([]byte, size), base: base} }
+func (r *ROM) Init(data []byte)            { copy(r.data, data) }
 func (r *ROM) Read(addr uint16) byte       { return r.data[addr-r.base] }
 func (r *ROM) Write(addr uint16, val byte) {}
 

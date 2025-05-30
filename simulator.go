@@ -1,6 +1,10 @@
 package main
 
 func main() {
-	nandpu := NewNANDPU()
-	nandpu.Step() // TODO
+	nandpu := NewNANDPU([]byte{
+		OP_CMP,
+		OP_ADD,
+	})
+	nandpu.Step()
+	nandpu.Step()
 }
