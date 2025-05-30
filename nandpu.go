@@ -51,6 +51,15 @@ func NewNANDPU(romData []byte) *NANDPU {
 	c.Mem.AddRegion(0x0000, 0x7FFF, rom)                    // 32K ROM (AT28C256)
 	c.Mem.AddRegion(0x8000, 0xFFFF, NewRAM(0x8000, 0x8000)) // 32K RAM (CY62256N)
 
+	c.PC.AccessFlags = AccessFlags{CanRead: true, CanWrite: true}
+	c.INST.AccessFlags = AccessFlags{CanRead: true, CanWrite: true}
+	c.INC.AccessFlags = AccessFlags{CanRead: true, CanWrite: false}
+
+	c.RegA.AccessFlags = AccessFlags{CanRead: true, CanWrite: true}
+	c.RegB.AccessFlags = AccessFlags{CanRead: true, CanWrite: true}
+	c.RegC.AccessFlags = AccessFlags{CanRead: true, CanWrite: true}
+	c.RegD.AccessFlags = AccessFlags{CanRead: true, CanWrite: true}
+
 	c.RegM = NewSplitReg16(
 		AccessFlags{CanRead: true, CanWrite: false}, // full M
 		AccessFlags{CanRead: true, CanWrite: true},  // M.Hi
@@ -66,6 +75,15 @@ func NewNANDPU(romData []byte) *NANDPU {
 		AccessFlags{CanRead: false, CanWrite: false}, // M.Hi
 		AccessFlags{CanRead: false, CanWrite: false}, // M.Lo
 	)
+
+	c.RegM.Hi.AccessFlags = AccessFlags{CanRead: true, CanWrite: true}
+	c.RegM.Lo.AccessFlags = AccessFlags{CanRead: true, CanWrite: true}
+
+	c.RegXY.Hi.AccessFlags = AccessFlags{CanRead: true, CanWrite: true}
+	c.RegXY.Lo.AccessFlags = AccessFlags{CanRead: true, CanWrite: true}
+
+	c.RegJ.Hi.AccessFlags = AccessFlags{CanRead: false, CanWrite: true}
+	c.RegJ.Lo.AccessFlags = AccessFlags{CanRead: false, CanWrite: true}
 
 	c.Reg8List = []Reg8Like{
 		&c.RegA,
@@ -116,7 +134,9 @@ func (c *NANDPU) updateFlags(value byte) {
 }
 
 func (c *NANDPU) increment16(value uint16) {
-	c.INC.Set(value + 1)
+	c.INC.val = value + 1
+	// We don't use the Set method here, because the INC register is configured to be read-only.
+	// This special logic is the only thing that writes to the INC register.
 }
 
 func (c *NANDPU) pcInc() {
