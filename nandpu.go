@@ -137,7 +137,7 @@ func (c *NANDPU) Step() { // TODO
 	c.getInst()
 	instName := OpcodeNames[c.INST.Get()]
 
-	Logger.Printf("Instruction byte: %s (0x%02X)\n", instName, c.INST.Get())
+	Logger.Printf("ADDR 0x%04X: Instruction byte: %s (0x%02X)\n", c.PC.Get(), instName, c.INST.Get())
 
 	switch c.INST.Get() {
 	case OP_NOP:
