@@ -97,6 +97,17 @@ func (c *NANDPU) getInst() {
 	c.INST.Set(c.getMemVal())
 }
 
+func (c *NANDPU) getReg8FromMem() (byte, Reg8Like) {
+	targetIndex := c.getMemVal()
+	target := c.Reg8List[targetIndex]
+	return targetIndex, target
+}
+func (c *NANDPU) getReg16FromMem() (byte, Reg16Like) {
+	targetIndex := c.getMemVal()
+	target := c.Reg16List[targetIndex]
+	return targetIndex, target
+}
+
 // Updates the Zero and Sign flags based off of the value argument, and Less Than based off of the A and B registers
 func (c *NANDPU) updateFlags(value byte) {
 	c.Zero = value == 0
@@ -145,8 +156,7 @@ func (c *NANDPU) Step() { // TODO
 		c.updateFlags(resultByte)
 		c.Carry = result > 0xFF
 		c.pcInc()
-		targetIndex := c.getMemVal()
-		target := c.Reg8List[targetIndex]
+		targetIndex, target := c.getReg8FromMem()
 		target.Set(resultByte)
 		Logger.Printf("ADD regB (value %d) + regC (value %d) -> %s (new value %d)", c.RegB.Get(), c.RegC.Get(), Reg8Names[targetIndex], target.Get())
 		c.printFlags()
