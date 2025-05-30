@@ -45,6 +45,13 @@ func (c *NANDPU) GetInst() byte {
 	return c.Mem.Read(uint16(c.INST))
 }
 
+// Updates the Zero and Sign flags based off of the value argument, and Less Than based off of the A and B registers
+func (c *NANDPU) UpdateFlags(value byte) {
+	c.Zero = value == 0
+	c.Sign = (value >> 7) == 1
+	c.LessThan = c.RegB < c.RegC
+}
+
 func (c *NANDPU) Step() { // TODO
 	Logger.Println("Start of step")
 }
