@@ -13,7 +13,7 @@ const (
 	// Changes flags: Zero, Carry, Sign, Less Than
 	//
 	// Description: Updates the flags based on registers B and C and performs no other operations.
-	// The Carry flag is set to the highest bit of 8-bit register B.
+	// The Carry flag is set to the lowest bit of 8-bit register B.
 	OP_CMP byte = 0x10
 
 	// Args: 1=[out 8-bit reg]
@@ -58,7 +58,7 @@ const (
 	//
 	// Description: Stores the result of (B NAND 1) into the output 8-bit register (arg 1).
 	// All flags are updated based on the result.
-	// The Carry flag is set to the highest bit of the result.
+	// The Carry flag is set to the lowest bit of the result.
 	OP_NAND byte = 0x15
 
 	// Args: 1=[out 8-bit reg]
