@@ -55,6 +55,7 @@ func NewNANDPU(romData []byte) *NANDPU {
 	c.PC.AccessFlags = AccessFlags{CanRead: true, CanWrite: true}
 	c.INST.AccessFlags = AccessFlags{CanRead: true, CanWrite: true}
 	c.INC.AccessFlags = AccessFlags{CanRead: true, CanWrite: false}
+	c.SP.val = 0xFFFF
 	c.SP.AccessFlags = AccessFlags{CanRead: true, CanWrite: true}
 
 	c.RegA.AccessFlags = AccessFlags{CanRead: true, CanWrite: true}
