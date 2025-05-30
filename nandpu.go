@@ -35,6 +35,10 @@ func NewNANDPU() *NANDPU {
 	return &c
 }
 
+func (c *NANDPU) GetInst() byte {
+	return c.Mem.Read(uint16(c.INST))
+}
+
 func (c *NANDPU) Step() { // TODO
 	Logger.Println("Start of step")
 }
