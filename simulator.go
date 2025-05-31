@@ -9,6 +9,7 @@ import (
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
 	"fyne.io/fyne/v2/container"
+	"fyne.io/fyne/v2/data/binding"
 	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
@@ -52,6 +53,8 @@ func main() {
 
 	running := false
 	stepNum := 0
+	speed := binding.NewFloat()
+	speed.Set(50)
 
 	createFixedLabel := func() (*widget.Label, *fyne.Container) {
 		value := widget.NewLabel("0x0000")
@@ -113,8 +116,14 @@ func main() {
 		updateGUIValues()
 	})
 
+	speedLabel := widget.NewLabel("50.0ms")
+	speedSlider := widget.NewSliderWithData(0.1, 150.0, speed)
+	speedSlider.Step = 0.1
+
+	speedSliderContainer := container.NewGridWrap(fyne.NewSize(200, 40), speedSlider)
+
 	btnRow := container.NewHBox(
-		runBtn, stepBtn, resetBtn, stepNumLabel,
+		runBtn, stepBtn, resetBtn, stepNumLabel, speedSliderContainer, speedLabel,
 	)
 
 	regRow1 := container.NewHBox(
@@ -226,6 +235,12 @@ func main() {
 
 		stepNumLabel.SetText(fmt.Sprintf("Step: %d", stepNum))
 
+		speedVal, err := speed.Get()
+		if err != nil {
+			Logger.Fatalf("Error: %s", err)
+		}
+		speedLabel.SetText(fmt.Sprintf("%.1fms", speedVal))
+
 		if running {
 			runBtn.SetText("Stop")
 			stepBtn.Disable()
@@ -247,8 +262,18 @@ func main() {
 				running = nandpu.Step()
 				stepNum += 1
 			}
+			speedVal, err := speed.Get()
+			if err != nil {
+				Logger.Fatalf("Error: %s", err)
+			}
+			time.Sleep(time.Millisecond * time.Duration(speedVal))
+		}
+	}()
+
+	go func() {
+		for {
+			time.Sleep(time.Millisecond * 50)
 			fyne.Do(updateGUIValues)
-			time.Sleep(time.Millisecond * 10)
 		}
 	}()
 
