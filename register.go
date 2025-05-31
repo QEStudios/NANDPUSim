@@ -92,10 +92,16 @@ func (h *splitHi) Get() byte {
 	}
 	return byte(h.parent.val >> 8)
 }
+func (h *splitHi) ForceGet() byte {
+	return byte(h.parent.val >> 8)
+}
 func (h *splitHi) Set(v byte) {
 	if !h.CanWrite {
 		Logger.Panic("attempted to write to splitHi without write capability")
 	}
+	h.parent.val = (h.parent.val & 0x00FF) | (uint16(v) << 8)
+}
+func (h *splitHi) ForceSet(v byte) {
 	h.parent.val = (h.parent.val & 0x00FF) | (uint16(v) << 8)
 }
 func (l *splitLo) Get() byte {
@@ -104,10 +110,16 @@ func (l *splitLo) Get() byte {
 	}
 	return byte(l.parent.val & 0x00FF)
 }
+func (l *splitLo) ForceGet() byte {
+	return byte(l.parent.val & 0x00FF)
+}
 func (l *splitLo) Set(v byte) {
 	if !l.CanWrite {
 		Logger.Panic("attempted to write to splitLo without write capability")
 	}
+	l.parent.val = (l.parent.val & 0xFF00) | uint16(v)
+}
+func (l *splitLo) ForceSet(v byte) {
 	l.parent.val = (l.parent.val & 0xFF00) | uint16(v)
 }
 
