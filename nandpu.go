@@ -141,6 +141,10 @@ func (c *NANDPU) increment16(value uint16) {
 	// This special logic is the only thing that writes to the INC register.
 }
 
+func (c *NANDPU) decrement16(value uint16) {
+	c.INC.val = value - 1
+}
+
 func (c *NANDPU) pcInc() {
 	c.increment16(c.PC.Get())
 	c.PC.Set(c.INC.Get())
@@ -148,11 +152,13 @@ func (c *NANDPU) pcInc() {
 
 func (c *NANDPU) push(val byte) {
 	c.Mem.Write(c.SP.Get(), val)
-	c.SP.val -= 1
+	c.decrement16(c.SP.Get())
+	c.SP.Set(c.INC.Get())
 }
 
 func (c *NANDPU) pop() byte {
-	c.SP.val += 1
+	c.increment16(c.SP.Get())
+	c.SP.Set(c.INC.Get())
 	return c.Mem.Read(c.SP.Get())
 }
 
