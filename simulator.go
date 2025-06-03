@@ -102,6 +102,7 @@ func main() {
 			fmt.Println("Run button clicked")
 			running = true
 		}
+		updateGUIValues()
 	})
 	stepBtn = widget.NewButton("Step", func() {
 		fmt.Println("Step button clicked")
@@ -116,7 +117,10 @@ func main() {
 		updateGUIValues()
 	})
 
-	speedLabel := widget.NewLabel("50.0ms")
+	stringSpeed := binding.NewString()
+	speedVal, _ := speed.Get()
+	stringSpeed.Set(fmt.Sprintf("%.1fms", speedVal))
+	speedLabel := widget.NewLabelWithData(stringSpeed)
 	speedSlider := widget.NewSliderWithData(0.1, 150.0, speed)
 	speedSlider.Step = 0.1
 
@@ -125,6 +129,11 @@ func main() {
 	btnRow := container.NewHBox(
 		runBtn, stepBtn, resetBtn, stepNumLabel, speedSliderContainer, speedLabel,
 	)
+
+	speed.AddListener(binding.NewDataListener(func() {
+		speedVal, _ := speed.Get()
+		stringSpeed.Set(fmt.Sprintf("%.1fms", speedVal))
+	}))
 
 	regRow1 := container.NewHBox(
 		widget.NewSeparator(),
@@ -235,12 +244,6 @@ func main() {
 
 		stepNumLabel.SetText(fmt.Sprintf("Step: %d", stepNum))
 
-		speedVal, err := speed.Get()
-		if err != nil {
-			Logger.Fatalf("Error: %s", err)
-		}
-		speedLabel.SetText(fmt.Sprintf("%.1fms", speedVal))
-
 		if running {
 			runBtn.SetText("Stop")
 			stepBtn.Disable()
@@ -259,21 +262,20 @@ func main() {
 	go func() {
 		for {
 			if running {
-				running = nandpu.Step()
+				continueRunning := nandpu.Step()
 				stepNum += 1
+				fyne.Do(updateGUIValues)
+				if !continueRunning {
+					running = false
+				}
+				speedVal, err := speed.Get()
+				if err != nil {
+					Logger.Fatalf("Error: %s", err)
+				}
+				time.Sleep(time.Millisecond * time.Duration(speedVal))
+			} else {
+				time.Sleep(time.Millisecond * 100)
 			}
-			speedVal, err := speed.Get()
-			if err != nil {
-				Logger.Fatalf("Error: %s", err)
-			}
-			time.Sleep(time.Millisecond * time.Duration(speedVal))
-		}
-	}()
-
-	go func() {
-		for {
-			time.Sleep(time.Millisecond * 50)
-			fyne.Do(updateGUIValues)
 		}
 	}()
 
