@@ -6,23 +6,46 @@ type MemoryRegion interface {
 }
 
 type RAM struct {
-	data []byte
-	base uint16
+	data    []byte
+	base    uint16
+	OnRead  func(addr uint16)
+	OnWrite func(addr uint16, value byte)
 }
 
-func NewRAM(base, size uint16) *RAM        { return &RAM{data: make([]byte, size), base: base} }
-func (r *RAM) Read(addr uint16) byte       { return r.data[addr-r.base] }
-func (r *RAM) Write(addr uint16, val byte) { r.data[addr-r.base] = val }
+func NewRAM(base, size uint16) *RAM { return &RAM{data: make([]byte, size), base: base} }
+func (r *RAM) Read(addr uint16) byte {
+	if r.OnRead != nil {
+		r.OnRead(addr)
+	}
+	return r.data[addr-r.base]
+}
+func (r *RAM) Write(addr uint16, val byte) {
+	if r.OnWrite != nil {
+		r.OnWrite(addr, val)
+	}
+	r.data[addr-r.base] = val
+}
 
 type ROM struct {
-	data []byte
-	base uint16
+	data    []byte
+	base    uint16
+	OnRead  func(addr uint16)
+	OnWrite func(adds uint16, value byte)
 }
 
-func NewROM(base, size uint16) *ROM        { return &ROM{data: make([]byte, size), base: base} }
-func (r *ROM) Init(data []byte)            { copy(r.data, data) }
-func (r *ROM) Read(addr uint16) byte       { return r.data[addr-r.base] }
-func (r *ROM) Write(addr uint16, val byte) {}
+func NewROM(base, size uint16) *ROM { return &ROM{data: make([]byte, size), base: base} }
+func (r *ROM) Init(data []byte)     { copy(r.data, data) }
+func (r *ROM) Read(addr uint16) byte {
+	if r.OnRead != nil {
+		r.OnRead(addr)
+	}
+	return r.data[addr-r.base]
+}
+func (r *ROM) Write(addr uint16, val byte) {
+	if r.OnWrite != nil {
+		r.OnWrite(addr, val)
+	}
+}
 
 type MemMap struct {
 	regions []MemoryRegionEntry
