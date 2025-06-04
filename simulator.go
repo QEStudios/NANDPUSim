@@ -213,7 +213,46 @@ func main() {
 		regRow4,
 		widget.NewSeparator(),
 	)
-	content := container.NewVBox(regContainer)
+
+	createMemoryList := func(mem *MemMap) *widget.List {
+		const rowSize = 16
+		const totalCells = 65536 // full 16-bit address space
+
+		// total rows is totalCells / rowSize
+		rowCount := totalCells / rowSize
+
+		return widget.NewList(
+			func() int {
+				return rowCount
+			},
+			func() fyne.CanvasObject {
+				// Create a row with 16 labels
+				row := make([]fyne.CanvasObject, rowSize)
+				for i := range row {
+					row[i] = widget.NewLabel("00")
+				}
+				return container.NewHBox(row...)
+			},
+			func(id widget.ListItemID, item fyne.CanvasObject) {
+				row := item.(*fyne.Container)
+				for i := 0; i < rowSize; i++ {
+					addr := uint16(id*rowSize + i)
+					byteValue := mem.Read(addr)
+					label := row.Objects[i].(*widget.Label)
+					label.SetText(fmt.Sprintf("%02X", byteValue))
+				}
+			},
+		)
+	}
+
+	memList := createMemoryList(&nandpu.Mem)
+
+	mainContainer := container.NewBorder(
+		regContainer, nil, nil, nil,
+		memList,
+	)
+
+	content := container.NewStack(mainContainer)
 	Wnd.SetContent(content)
 
 	updateGUIValues = func() {
